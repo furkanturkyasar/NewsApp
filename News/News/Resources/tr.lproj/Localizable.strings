@@ -5,3 +5,14 @@
   Created by Furkan Türkyaşar on 30.01.2025.
   
 */
+"Tabbar.News" = "Haberler";
+"Tabbar.Settings" = "Ayarlar";
+
+"%d_years_ago" = "%d yıl önce";
+"%d_months_ago" = "%d ay önce";
+"%d_weeks_ago" = "%d hafta önce";
+"%d_days_ago" = "%d gün önce";
+"%d_hours_ago" = "%d saat önce";
+"%d_minutes_ago" = "%d dakika önce";
+"just_now" = "Az önce";
+"unknown_time" = "Bilinmeyen zaman";

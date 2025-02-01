@@ -19,8 +19,14 @@ final class MainTabBarController: UITabBarController {
         let newsListVC = UINavigationController(rootViewController: NewsListViewController())
         let settingsVC = UINavigationController(rootViewController: SettingsViewController())
 
-        newsListVC.tabBarItem = UITabBarItem(title: "News", image: UIImage(systemName: "newspaper"), tag: 0)
-        settingsVC.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "gearshape"), tag: 1)
+        newsListVC.tabBarItem = UITabBarItem(
+            title: NSLocalizedString("Tabbar.News", comment: ""),
+            image: UIImage(systemName: "newspaper.fill"), tag: 0
+        )
+        settingsVC.tabBarItem = UITabBarItem(
+            title: NSLocalizedString("Tabbar.Settings", comment: ""),
+            image: UIImage(systemName: "gear"), tag: 1
+        )
 
         viewControllers = [newsListVC, settingsVC]
     }

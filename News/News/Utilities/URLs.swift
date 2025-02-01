@@ -15,7 +15,7 @@ enum URLs {
         if let q = q, !q.isEmpty {
             baseUrl += "&q=\(q)"
         }
-
+        print("base url: \(baseUrl)")
         return baseUrl
     }
 }
