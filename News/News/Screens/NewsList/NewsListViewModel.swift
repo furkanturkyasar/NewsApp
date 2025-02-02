@@ -22,7 +22,7 @@ final class NewsListViewModel {
     init() {
         inputDelegate = self
 
-        refreshData()
+        // refreshData()
     }
 
     func fetchTopHeadlines(page: Int = 1, query: String? = nil, completion: @escaping () -> Void) {
