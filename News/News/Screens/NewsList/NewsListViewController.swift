@@ -13,7 +13,6 @@ protocol NewsListOutputProtocol: AnyObject {
 
 final class NewsListViewController: UIViewController {
     private let viewModel: NewsListViewModel = .init()
-    private var page: Int = 1
 
     private var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -45,6 +44,7 @@ private extension NewsListViewController {
         navigationItem.title = NSLocalizedString("Tabbar.News", comment: "")
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.searchController = UISearchController(searchResultsController: nil)
+        navigationItem.searchController?.searchBar.delegate = self
         configureCollectionView()
     }
 
@@ -112,20 +112,30 @@ extension NewsListViewController: UICollectionViewDataSource, UICollectionViewDe
 
 extension NewsListViewController: UIScrollViewDelegate, UICollectionViewDataSourcePrefetching {
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-//        for indexPath in indexPaths {
-//            viewModel.inputDelegate?.fetchMoreData(page: 1, query: nil)
-//        }
-    }
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        let scrollViewHeight = scrollView.frame.size.height
-
-        if offsetY > contentHeight - scrollViewHeight - 100 {
-            page += 1
-            viewModel.inputDelegate?.fetchMoreData(page: page, query: nil)
+        let nextPageTrigger = viewModel.articles.count - 5
+        if indexPaths.contains(where: { $0.item >= nextPageTrigger }) {
+            viewModel.inputDelegate?.fetchMoreData()
         }
+    }
+}
+
+// MARK: - SearchBar
+
+extension NewsListViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            viewModel.query = nil
+            viewModel.fetchData()
+        }
+        guard searchText.count >= 3 else {
+            return
+        }
+        if searchText.isEmpty {
+            viewModel.query = nil
+            viewModel.fetchData()
+        }
+        viewModel.query = searchText
+        viewModel.fetchData()
     }
 }
 
@@ -134,7 +144,9 @@ extension NewsListViewController: UIScrollViewDelegate, UICollectionViewDataSour
 extension NewsListViewController: NewsListOutputProtocol {
     func reloadData() {
         DispatchQueue.main.async {
-            self.collectionView.reloadData()
+            UIView.transition(with: self.collectionView, duration: 0.3, options: .transitionCrossDissolve, animations: {
+                self.collectionView.reloadData()
+            }, completion: nil)
         }
     }
 }
