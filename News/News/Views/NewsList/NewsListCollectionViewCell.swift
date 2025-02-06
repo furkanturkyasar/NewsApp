@@ -55,7 +55,7 @@ final class NewsListCollectionViewCell: UICollectionViewCell {
         label.textColor = .secondaryLabel
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .categoryTitle
-        label.text = "Economy"
+        label.text = NSLocalizedString("economy", comment: "")
         return label
     }()
 
@@ -99,7 +99,7 @@ final class NewsListCollectionViewCell: UICollectionViewCell {
 
     func configure(with model: Article) {
         titleLabel.text = model.title
-        subTitleLabel.text = "By \(model.source.name)"
+        subTitleLabel.text = "\(model.source.name)"
         articleUrl = model.url
 
         if let date = model.publishedAt.toDate() {
@@ -184,10 +184,10 @@ private extension NewsListCollectionViewCell {
         guard let viewController = findViewController() else { return }
 
         let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        let shareAction = UIAlertAction(title: "Haberi Paylaş", style: .default) { _ in
+        let shareAction = UIAlertAction(title: NSLocalizedString("share_news", comment: ""), style: .default) { _ in
             self.shareArticle(from: viewController)
         }
-        let cancelAction = UIAlertAction(title: "İptal", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("cancel", comment: ""), style: .cancel, handler: nil)
 
         actionSheet.addAction(shareAction)
         actionSheet.addAction(cancelAction)

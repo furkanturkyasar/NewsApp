@@ -7,12 +7,9 @@
 
 import UIKit
 
-protocol SettingsOutputProtocol: AnyObject {}
-
 final class SettingsViewController: UIViewController {
 
-    private let viewModel: SettingsViewModel = .init()
-
+    // MARK: UI Element
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -23,7 +20,6 @@ final class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewModel.outputDelegate = self
         setupUI()
     }
 
@@ -40,15 +36,33 @@ final class SettingsViewController: UIViewController {
     }
 
     private let settingsSections: [[SettingItem]] = [
-        [SettingItem(title: "App Theme", icon: "circle.righthalf.filled", type: .theme)],
-        [SettingItem(title: "Notification", icon: "bell.fill", type: .notification)],
-        [SettingItem(title: "Rate Us", icon: "star.fill", type: .defaultItem)],
-        [SettingItem(title: "Privacy Policy", icon: "text.document.fill", type: .defaultItem),
-         SettingItem(title: "Terms of Use", icon: "checkmark.shield.fill", type: .defaultItem)]
+        [
+            SettingItem(
+                title: NSLocalizedString("app_theme", comment: ""),
+                icon: "circle.righthalf.filled", type: .theme)
+        ],
+        [
+            SettingItem(
+                title: NSLocalizedString("notification", comment: ""),
+                icon: "bell.fill", type: .notification)
+        ],
+        [
+            SettingItem(
+                title: NSLocalizedString("rate_us", comment: ""),
+                icon: "star.fill", type: .defaultItem)
+        ],
+        [
+            SettingItem(
+                title: NSLocalizedString("privacy_policy", comment: ""),
+                icon: "text.document.fill", type: .defaultItem),
+            SettingItem(
+                title: NSLocalizedString("terms_of_user", comment: ""),
+                icon: "checkmark.shield.fill", type: .defaultItem)
+        ]
     ]
 }
 
-// MARK: - Private Methods
+// MARK: Private Methods
 
 private extension SettingsViewController {
     func setupUI () {
@@ -139,7 +153,12 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
 
         switch item.type {
         case .theme:
-            let themeControl = UISegmentedControl(items: ["Light", "Dark"])
+            let themeControl = UISegmentedControl(
+                items: [
+                    NSLocalizedString("light", comment: ""),
+                    NSLocalizedString("dark", comment: "")
+                ]
+            )
             let currentStyle = traitCollection.userInterfaceStyle
             themeControl.selectedSegmentIndex = (currentStyle == .dark) ? 1 : 0
             themeControl.addTarget(self, action: #selector(themeChanged(_:)), for: .valueChanged)
@@ -198,7 +217,3 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 }
-
-// MARK: - SettingsOutputProtocol
-
-extension SettingsViewController: SettingsOutputProtocol {}

@@ -16,7 +16,7 @@ final class NewsListViewModel {
     private(set) var articles: [Article] = []
     private var page: Int = 1
     var query: String?
-    private var isLoading: Bool = false
+    private(set) var isLoading: Bool = false
     var news: News!
 
     private var debounceWorkItem: DispatchWorkItem?
@@ -33,6 +33,7 @@ final class NewsListViewModel {
     func fetchTopHeadlines(page: Int = 1, query: String? = nil, completion: @escaping () -> Void) {
         guard !isLoading else { return }
 
+        self.isLoading = true
         newsService.fetchTopHeadlines(page: page, query: query) { [weak self] result in
             guard let self = self else { return }
 
