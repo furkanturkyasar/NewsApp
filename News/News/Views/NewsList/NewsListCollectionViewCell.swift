@@ -10,6 +10,7 @@ import UIKit
 
 final class NewsListCollectionViewCell: UICollectionViewCell {
     static let identifier = "NewsListCell"
+    private var articleUrl: String?
 
     // MARK: - UI Elements
 
@@ -99,6 +100,7 @@ final class NewsListCollectionViewCell: UICollectionViewCell {
     func configure(with model: Article) {
         titleLabel.text = model.title
         subTitleLabel.text = "By \(model.source.name)"
+        articleUrl = model.url
 
         if let date = model.publishedAt.toDate() {
             timeLabel.text = date.timeAgo()
@@ -172,5 +174,42 @@ private extension NewsListCollectionViewCell {
             dotsIcon.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             dotsIcon.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
         ])
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dotsIconTapped))
+        dotsIcon.isUserInteractionEnabled = true
+        dotsIcon.addGestureRecognizer(tapGesture)
+    }
+
+    @objc func dotsIconTapped() {
+        guard let viewController = findViewController() else { return }
+
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let shareAction = UIAlertAction(title: "Haberi Paylaş", style: .default) { _ in
+            self.shareArticle(from: viewController)
+        }
+        let cancelAction = UIAlertAction(title: "İptal", style: .cancel, handler: nil)
+
+        actionSheet.addAction(shareAction)
+        actionSheet.addAction(cancelAction)
+
+        viewController.present(actionSheet, animated: true)
+    }
+
+    func findViewController() -> UIViewController? {
+        var responder: UIResponder? = self
+        while let nextResponder = responder?.next {
+            if let viewController = nextResponder as? UIViewController {
+                return viewController
+            }
+            responder = nextResponder
+        }
+        return nil
+    }
+
+    func shareArticle(from viewController: UIViewController) {
+        guard let url = articleUrl else { return }
+
+        let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        viewController.present(activityViewController, animated: true)
     }
 }
