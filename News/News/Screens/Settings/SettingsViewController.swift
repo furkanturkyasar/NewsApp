@@ -184,12 +184,17 @@ extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
 
         switch item.type {
         case .defaultItem:
-            if item.title == "Rate Us" {
-                openAppStore()
-            } else if item.title == "Privacy Policy" {
-                openLinkInSafari(urlString: "https://www.google.com")
-            } else if item.title == "Terms of Use" {
-                openLinkInSafari(urlString: "https://www.google.com")
+            if let itemType = Constants(localizedTitle: item.title) {
+                switch itemType {
+                case .rateUs:
+                    openAppStore()
+
+                case .privacyPolicy:
+                    openLinkInSafari(urlString: "https://www.google.com")
+
+                case .termsOfService:
+                    openLinkInSafari(urlString: "https://www.google.com")
+                }
             }
 
         default:
