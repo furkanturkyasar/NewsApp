@@ -162,12 +162,33 @@ private extension NewsDetailViewController {
         actionSheet.addAction(shareAction)
         actionSheet.addAction(cancelAction)
 
+        if let popoverController = actionSheet.popoverPresentationController {
+            if let barButtonItem = self.navigationItem.rightBarButtonItem {
+                popoverController.barButtonItem = barButtonItem
+            } else {
+                popoverController.sourceView = self.view
+                popoverController.sourceRect = CGRect(
+                    x: self.view.bounds.midX,
+                    y: self.view.bounds.midY, width: 0, height: 0)
+            }
+            popoverController.permittedArrowDirections = .any
+        }
+
         self.present(actionSheet, animated: true)
     }
 
     func shareArticle(from viewController: UIViewController) {
         let url = viewModel.article.url
         let activityViewController = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+
+        if let popoverController = activityViewController.popoverPresentationController {
+            popoverController.sourceView = viewController.view
+            popoverController.sourceRect = CGRect(
+                x: viewController.view.bounds.midX,
+                y: viewController.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = .any
+        }
+
         viewController.present(activityViewController, animated: true)
     }
 }
